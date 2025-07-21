@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Department Attendance Analytics</title>
+    <link rel="stylesheet" href="{% static 'css/department.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header class="navbar">
+    <div class="logo">
+        <a href="{% url 'dashboard' %}">
+            <img src="{% static 'images/logogbn.png' %}" alt="Logo" />
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'analytics_general' %}">General</a></li>
+            <li><a href="{% url 'department_analytics' %}">Department</a></li>
+            <li>
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="analytics-container">
+    <h1>Department Analytics</h1>
+
+    <div class="chart-toggle">
+        <button data-chart="daily" onclick="showChart('daily')">Daily</button>
+        <button data-chart="weekly" onclick="showChart('weekly')">Weekly</button>
+        <button data-chart="monthly" onclick="showChart('monthly')">Monthly</button>
+        <button data-chart="mostleast" onclick="showChart('mostleast')">Most vs Least</button>
+    </div>
+
+    <div class="charts-grid">
+        <div id="daily" class="chart-section chart-card active">
+            <h3>Department-wise Daily Attendance</h3>
+            <canvas id="dailyChart"></canvas>
+        </div>
+        <div id="weekly" class="chart-section chart-card">
+            <h3>Department-wise Weekly Attendance</h3>
+            <canvas id="weeklyChart"></canvas>
+        </div>
+        <div id="monthly" class="chart-section chart-card">
+            <h3>Department-wise Monthly Attendance</h3>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        <div id="mostleast" class="chart-section chart-card">
+            <h3>Most vs Least Present Departments</h3>
+            <canvas id="mostLeastChart"></canvas>
+        </div>
+    </div>
+</main>
+
+<script>
+   const showChart = (id) => {
+    // Show the selected chart
+    document.querySelectorAll(".chart-section").forEach(div => {
+        div.classList.remove("active");
+    });
+    document.getElementById(id).classList.add("active");
+
+    // Update active button styling
+    document.querySelectorAll(".chart-toggle button").forEach(btn => {
+        btn.classList.remove("active-btn");
+        if (btn.getAttribute("data-chart") === id) {
+            btn.classList.add("active-btn");
+        }
+    });
+};
+
+    // Render charts after fetching data
+    const renderChart = (ctx, type, labels, data, bgColor) => {
+        new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Count',
+                    data: data,
+                    backgroundColor: bgColor,
+                    borderColor: '#fff',
+                    borderWidth: 2,
+                    borderRadius: 12,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: {
+                        backgroundColor: '#333',
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }
+                },
+                scales: type === 'doughnut' ? {} : {
+                    x: { ticks: { color: '#ccc' }, grid: { color: '#444' } },
+                    y: { ticks: { color: '#ccc' }, grid: { color: '#444' } }
+                }
+            }
+        });
+    };
+
+    fetch("{% url 'department_attendance_data' %}")
+        .then(res => res.json())
+        .then(data => {
+            renderChart(document.getElementById('dailyChart'), 'bar', data.daily.labels, data.daily.counts, 'rgba(75,192,192,0.7)');
+            renderChart(document.getElementById('weeklyChart'), 'bar', data.weekly.labels, data.weekly.counts, 'rgba(255,159,64,0.7)');
+            renderChart(document.getElementById('monthlyChart'), 'line', data.monthly.labels, data.monthly.counts, 'rgba(153,102,255,0.7)');
+            renderChart(document.getElementById('mostLeastChart'), 'bar', data.most_least.labels, data.most_least.counts, ['rgba(54,162,235,0.7)', 'rgba(255,99,132,0.7)']);
+        })
+        .catch(error => console.error('Fetch Error:', error));
+</script>
+</body>
+</html>

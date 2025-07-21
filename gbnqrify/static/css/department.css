@@ -1,0 +1,92 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #1e1e2f;
+    color: #fff;
+}
+.navbar {
+    background: #222;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo img {
+    height: 50px;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+.nav-links li a,
+.btn-logout {
+    color: #fff;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.analytics-container {
+    padding: 40px;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    
+}
+.chart-toggle {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.chart-toggle button {
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.chart-toggle button:hover {
+    background: #666;
+}
+
+
+.chart-toggle button.active-btn {
+    background: #007BFF; /* Bright blue */
+    color: #fff;
+    font-weight: bold;
+    border: 2px solid #3399ff;
+}
+
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+.chart-card {
+    background: #2d2d44;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    width: 600px;
+    max-width: 90%;
+    margin: 0 auto;
+    text-align: center;
+}
+.chart-card:hover {
+    transform: translateY(-5px);
+}
+.chart-section {
+    display: none;
+}
+.chart-section.active {
+    display: block;
+}
+canvas {
+    max-width: 100%;
+    height: 300px !important;
+}

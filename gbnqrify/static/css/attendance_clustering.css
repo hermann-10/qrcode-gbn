@@ -1,0 +1,101 @@
+/* attendance_clustering.css */
+
+body {
+  background-color: #121221;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 960px;
+  margin: auto;
+  background-color: #1e1e2f;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #a0a0b8;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+}
+
+thead tr {
+  background-color: #292a3a;
+  text-align: left;
+}
+
+thead th {
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #a0a0b8;
+  border-bottom: 2px solid #444466;
+}
+
+tbody tr {
+  background-color: #2b2c40;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+}
+
+tbody tr:hover {
+  background-color: #3c3d5e;
+}
+
+tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #3a3b52;
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 600px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 18px;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.4);
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  tbody td {
+    border: none;
+    padding-left: 50%;
+    position: relative;
+    text-align: left;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 20px;
+    top: 14px;
+    font-weight: 700;
+    color: #a0a0b8;
+  }
+}

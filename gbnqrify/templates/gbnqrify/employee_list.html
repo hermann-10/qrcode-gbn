@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee List</title>
+  <link rel="stylesheet" href="{% static 'css/employee_list.css' %}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="{% static 'img/logo.png' %}" alt="Logo" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="/dashboard/">Dashboard</a></li>
+      <li><a href="#" class="active">Employees</a></li>
+      <li><a href="/analytics/">Analytics</a></li>
+    </ul>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="btn-logout">Logout</button>
+    </form>
+  </div>
+
+  <h1>Employee List</h1>
+
+  <table class="modern-table">
+    <thead>
+      <tr>
+        <th style="width: 80px;">Name</th>
+        <th>Department</th>
+        <th>Email</th>
+        <th>UUID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in employees %}
+      <tr>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.department }}</td>
+        <td>{{ employee.uuid }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No employees found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>

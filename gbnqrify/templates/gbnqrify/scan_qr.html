@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>QR Code Scanner</title>
+    <link rel="stylesheet" href="{% static 'css/scan.css' %}" />
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'images/logogbn.png' %}" alt="Logo" />
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'employee_register' %}">Register</a></li>
+                <li><a href="{% url 'employee_data' %}">View All</a></li>
+                <li>
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="scan-container">
+        <div class="scan-card">
+            <h2 class="scan-title">Scan QR Code</h2>
+            <form method="post" id="scan-form">
+                {% csrf_token %}
+                <label class="scan-label" for="qr_data">QR UUID</label>
+                <input type="text" name="qr_data" id="qr_data" class="scan-input" placeholder="Scan or paste UUID..." autofocus required />
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+
+            {% if feedback %}
+                <div class="feedback" id="feedback-box">{{ feedback }}</div>
+            {% else %}
+                <div class="feedback" id="feedback-box" style="display:none;"></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const feedbackBox = document.getElementById('feedback-box');
+
+    if (feedbackBox && feedbackBox.textContent.trim() !== '') {
+        // Show feedback if exists
+        feedbackBox.style.display = 'block';
+
+        // Auto-hide feedback after 5 seconds with fade out
+        setTimeout(() => {
+            feedbackBox.style.transition = 'opacity 0.5s ease';
+            feedbackBox.style.opacity = '0';
+
+            setTimeout(() => {
+                feedbackBox.style.display = 'none';
+                feedbackBox.style.opacity = '1'; // reset for next time
+            }, 500);
+        }, 3500);
+    }
+});
+
+let scanning = false;
+
+function onScanSuccess(decodedText, decodedResult) {
+  if (scanning) return;  // Ignore if still in cooldown
+
+  scanning = true;
+  console.log(`Scanned QR code: ${decodedText}`);
+
+  // Your code to process scanned QR code here
+  // e.g., send AJAX request to server
+
+  // Wait 5 seconds before allowing next scan
+  setTimeout(() => {
+    scanning = false;
+  }, 1000);
+}
+</script>
+
+</body>
+</html>

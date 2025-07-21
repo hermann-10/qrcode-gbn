@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>General Attendance Analytics</title>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'images/logogbn.png' %}" alt="Logo" />
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'employee_register' %}">Register</a></li>
+                <li><a href="{% url 'employee_data' %}">View All</a></li>
+                <li>
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="analytics-container">
+        <h1>General Attendance Analytics</h1>
+
+        <div class="chart-toggle">
+            <button class="active-btn" data-target="dailySection">Daily</button>
+            <button data-target="weeklySection">Weekly</button>
+            <button data-target="monthlySection">Monthly</button>
+            <button data-target="presenceSection">Presence vs Absence</button>
+        </div>
+
+        <div class="charts-grid">
+            <div id="dailySection" class="chart-card chart-section active">
+                <h3>Daily Attendance</h3>
+                <canvas id="dailyChart"></canvas>
+            </div>
+            <div id="weeklySection" class="chart-card chart-section">
+                <h3>Weekly Attendance</h3>
+                <canvas id="weeklyChart"></canvas>
+            </div>
+            <div id="monthlySection" class="chart-card chart-section">
+                <h3>Monthly Attendance</h3>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+            <div id="presenceSection" class="chart-card chart-section">
+                <h3>Presence vs Absence</h3>
+                <canvas id="presenceAbsenceChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const create3DChart = (ctx, type, data, labels, bgColors) => {
+            new Chart(ctx, {
+                type: type,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Count',
+                        data: data,
+                        backgroundColor: bgColors,
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        borderRadius: 12,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#fff' } },
+                        tooltip: {
+                            backgroundColor: '#333',
+                            borderColor: '#fff',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: type === 'doughnut' ? {} : {
+                        x: { ticks: { color: '#ccc' }, grid: { color: '#444' } },
+                        y: { ticks: { color: '#ccc' }, grid: { color: '#444' } }
+                    }
+                }
+            });
+        };
+
+        fetch("{% url 'attendance_data' %}")
+            .then(response => response.json())
+            .then(data => {
+                create3DChart(
+                    document.getElementById('dailyChart'),
+                    'bar',
+                    data.daily.counts,
+                    data.daily.labels,
+                    'rgba(75,192,192,0.7)'
+                );
+                create3DChart(
+                    document.getElementById('weeklyChart'),
+                    'bar',
+                    data.weekly.counts,
+                    data.weekly.labels,
+                    'rgba(255,159,64,0.7)'
+                );
+                create3DChart(
+                    document.getElementById('monthlyChart'),
+                    'line',
+                    data.monthly.counts,
+                    data.monthly.labels,
+                    'rgba(153,102,255,0.7)'
+                );
+                create3DChart(
+                    document.getElementById('presenceAbsenceChart'),
+                    'doughnut',
+                    data.presence.counts,
+                    data.presence.labels,
+                    ['rgba(54,162,235,0.7)', 'rgba(255,99,132,0.7)']
+                );
+            })
+            .catch(error => {
+                console.error('Error fetching attendance data:', error);
+            });
+
+        // Toggle chart display & active button
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.chart-toggle button');
+            const sections = document.querySelectorAll('.chart-section');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const target = button.dataset.target;
+
+                    buttons.forEach(btn => btn.classList.remove('active-btn'));
+                    button.classList.add('active-btn');
+
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === target) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

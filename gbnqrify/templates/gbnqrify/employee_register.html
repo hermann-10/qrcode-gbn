@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Employee Registration</title>
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS for modal -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    
+</head>
+<body>
+
+    <!-- NAVBAR -->
+     <header class="navbar">
+  <div class="logo">
+    <img src="{% static 'images/logogbn.png' %}" alt="Logo" class="logo-img" />
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'employee_filter' %}">View Employee Data</a></li>
+  </ul>
+
+  <div class="profile admin">
+    <div class="profile-name">
+      <img src="{% static 'images/avatar1.jpeg' %}" alt="Profile" />
+      <span>Admin</span>
+    </div>
+    <div class="dropdown">
+      <a href="#">Settings</a>
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+
+    <!-- MAIN FORM CONTENT -->
+    <div class="container">
+        <main class="page-content">
+            <div class="form-image-flex">
+                <form method="post" novalidate class="registration-form" id="employeeForm" action="{% url 'employee_register' %}">
+                    <div class="form-header">
+                         <img src="/media/qr_codes/logo.png" alt="Logo" class="form-logo">
+                         <h1>Employee Registration</h1>
+                    </div>
+
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    <label for="{{ form.first_name.id_for_label }}">First Name:</label>
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}
+
+                    <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
+                    {{ form.last_name }}
+                    {{ form.last_name.errors }}
+
+                    <label for="{{ form.created_at.id_for_label }}">Date of Joining:</label>
+                    {{ form.created_at }}
+                    {{ form.created_at.errors }}
+
+                    <label for="{{ form.department.id_for_label }}">Department:</label>
+                    {{ form.department }}
+                    {{ form.department.errors }}
+
+                    <button type="submit" class="btn btn-primary mt-3">Register</button>
+                </form>
+
+                <div class="form-image-container">
+                    <img src="{% static 'images/reg.png' %}" alt="Registration Illustration" class="animated-image">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 <strong>Anothjeev</strong> — Junior Full Stack Developer-GBN</p>
+    </footer>
+
+    <!-- Bootstrap Modal for success -->
+    <div
+      class="modal fade"
+      id="successModal"
+      tabindex="-1"
+      aria-labelledby="successModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:#202040; color:#a3bffa;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="successModalLabel">Success</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            Employee registered successfully!
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script>
+      $(document).ready(function () {
+        $("#employeeForm").submit(function (e) {
+          e.preventDefault(); // prevent default form submit
+
+          $.ajax({
+            url: "{% url 'employee_register' %}",
+            method: "POST",
+            data: $(this).serialize(),
+            success: function (response) {
+              if (response.success) {
+                // Show Bootstrap modal on success
+                var successModal = new bootstrap.Modal(
+                  document.getElementById("successModal")
+                );
+                successModal.show();
+
+                // Reset the form
+                $("#employeeForm")[0].reset();
+              } else {
+                alert("Registration failed: " + response.error);
+              }
+            },
+            error: function () {
+              alert("An error occurred during registration.");
+            },
+          });
+        });
+      });
+    </script>
+</body>
+</html>

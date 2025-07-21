@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">
+            <img src="{% static 'images/logogbn.png' %}" alt="GBN Logo" class="logo-img" />
+        </div>
+        <ul class="nav-links">
+            <li><a href="{% url 'employee_register' %}">Register Employee</a></li>
+            <li><a href="{% url 'employee_data' %}">View Employee Details </a></li>
+        </ul>
+
+        <!-- Profile with dropdown -->
+        <div class="profile">
+            <div class="profile-name">
+                <img src="{% static 'images/avatar1.jpeg' %}" alt="Profile" />
+                <span>Admin</span>
+            </div>
+            <div class="dropdown">
+                <a href="#">Settings</a>
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODERN TITLE BELOW NAVBAR -->
+    <section class="dashboard-title">
+        <h1>Welcome To Admin Dashboard</h1>
+    </section>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="dashboard-main">
+        <section class="dashboard-container">
+            <!-- Staff Box -->
+            <div class="dashboard-box staff-box" onclick="window.location.href='{% url 'employee_register' %}'">
+                <h2>GBN Staff</h2>
+                <div class="logocont">
+                    <img src="{% static 'images/iconEmp.png' %}" alt="Staff Logo" class="employee-img" />
+                </div>
+                <div class="staff-options">
+                    <a href="{% url 'employee_register' %}" class="box-link">Register Employee</a>
+                    <a href="{% url 'employee_filter' %}" class="box-link">Filter by Department</a>
+                    <a href="/scan" class="box-link">Scan QR/Barcode</a>
+                </div>
+            </div>
+            <div class="dashboard-box analytics-box" onclick="window.location.href='{% url 'analytics_dashboard' %}'">
+                <h2>Analytics</h2>
+                <div class="logocont">
+                     <img src="{% static 'images/analytic-emp.png' %}" alt="Analytics Logo" class="employee-img" />
+            </div>
+            <div class="analytics-options">
+                    <a href="{% url 'analytics_general' %}" class="box-link">General</a>
+                    <a href="{% url 'department_analytics' %}" class="box-link">Department</a>
+                    <a href="{% url 'employee_analytics' %}" class="box-link">Employee</a>
+            </div>
+            </div>
+
+            
+
+           
+            <!-- Settings Box -->
+            <div class="dashboard-box contact-box" onclick="window.location.href='{% url 'employee_data' %}'">
+                <h2>Settings</h2>
+                <div class="logocont">
+                    <img src="{% static 'images/Settings_ad.png' %}" alt="Settings Logo" class="employee-img" />
+                </div>
+                <div class="analytics-options">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 <strong>Anothjeev</strong> — Junior Full Stack Developer-GBN</p>
+    </footer>
+</body>
+</html>

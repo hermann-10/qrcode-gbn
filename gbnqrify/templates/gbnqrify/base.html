@@ -1,0 +1,31 @@
+<!-- gbnqrify/templates/gbnqrify/base.html -->
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}GBN QR System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>GBN QR Admin Panel</h1>
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a> |
+            <a href="{% url 'employee_register' %}">Register</a> |
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>&copy; 2025 GBN QR System</p>
+    </footer>
+</body>
+</html>

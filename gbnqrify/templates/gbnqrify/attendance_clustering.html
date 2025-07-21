@@ -1,0 +1,52 @@
+{% load static %}
+{% load extra_filters %}  {# For your dict_get filter #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Attendance Clustering</title>
+  <link rel="stylesheet" href="{% static 'css/attendance_clustering.css' %}" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>Attendance Clustering</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Cluster</th>
+          <th>Avg AM Scan Time</th>
+          <th>Avg PM Scan Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stat in stats %}
+          <tr>
+            <td data-label="Employee">{{ stat.employee.first_name }} {{ stat.employee.last_name }}</td>
+            <td data-label="Cluster">{{ cluster_labels|dict_get:stat.cluster }}</td>
+            <td data-label="Avg AM Scan Time">
+              {% if stat.avg_am_time %}
+                {{ stat.avg_am_time|time:"H:i:s" }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td data-label="Avg PM Scan Time">
+              {% if stat.avg_pm_time %}
+                {{ stat.avg_pm_time|time:"H:i:s" }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

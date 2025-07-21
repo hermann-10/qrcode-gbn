@@ -1,0 +1,343 @@
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #1a3554, #01112c);
+  color: #000;
+ 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 70px;
+  background-color: #022f43;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  gap: 10rem;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Logo */
+.logo-img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Nav links container */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.8rem;
+  margin-left: 2rem;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #a3d8f4;
+}
+
+/* Profile container */
+.profile {
+  position: relative;
+  cursor: pointer;
+  color: #fff;
+  user-select: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Profile name and avatar */
+.profile-name {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fff;
+}
+
+.profile-name img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #38bdf8;
+}
+
+/* Dropdown menu */
+.dropdown {
+  position: absolute;
+  top: 70px; /* below navbar */
+  right: 0;
+  background-color: #084d7a;
+  color: #d0d4f7;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: none;
+  flex-direction: column;
+  min-width: 160px;
+  z-index: 1100;
+}
+
+/* Dropdown links and buttons */
+.dropdown a,
+.dropdown button {
+  padding: 0.75rem 1rem;
+  color: inherit;
+  border-bottom: 1px solid #2c3579;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.dropdown a:hover,
+.dropdown button:hover {
+  background-color: #1369c6;
+}
+
+/* Show dropdown on hover */
+.profile:hover .dropdown,
+.settings:hover .dropdown,
+.admin:hover .dropdown {
+  display: flex;
+}
+
+/* Special dropdown positions for settings and admin */
+.settings,
+.admin {
+  position: relative;
+}
+
+.settings .dropdown {
+  left: 0;
+  right: auto;
+}
+
+.admin .dropdown {
+  right: 0;
+  left: auto;
+}
+
+/* Logout button styling */
+.logout-form button {
+  background: none;
+  border: none;
+  color: #d0d4f7;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+}
+
+/* ===== Container & Layout ===== */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+    padding-bottom: 100px;
+}
+
+/* Flex container for form and image */
+.form-image-flex {
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* ===== Registration Form ===== */
+.registration-form {
+    margin-top: 80px;
+     margin-bottom: 100px;
+  background: rgba(255, 252, 252, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  padding: 40px 35px;
+  max-width: 350px;
+  width: 100%;
+  color: #060606;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form header */
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.form-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1.5px #38bdf8);
+}
+
+.registration-form h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #a3bffa;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Labels & Inputs */
+label {
+  font-weight: 600;
+  margin-top: 18px;
+  color: #a3bffa;
+}
+
+input, select {
+  margin-top: 6px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #6272a4;
+  background: rgba(255, 255, 255, 0.1);
+  color: #040404;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  outline-offset: 0;
+  outline-color: transparent;
+}
+
+input::placeholder {
+  color: #a3bffaaa;
+}
+
+input:focus, select:focus {
+  border-color: #38bdf8;
+  background-color: rgba(255, 255, 255, 0.15);
+  outline-color: #38bdf8;
+}
+
+/* Submit button */
+button[type="submit"] {
+  margin-top: 30px;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #38bdf8 0%, #0ea5e9 100%);
+  box-shadow: 0 6px 15px rgba(8, 145, 197, 0.5);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.05em;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(90deg, #0ea5e9 0%, #38bdf8 100%);
+  box-shadow: 0 8px 20px rgba(8, 145, 197, 0.7);
+}
+
+/* Success & Error messages */
+.success-message {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #5eead4;
+  font-weight: 600;
+}
+
+.errorlist {
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding-left: 0;
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+/* ===== Image Container ===== */
+.form-image-container {
+  max-width: 350px;
+  width: 100%;
+  animation: slideInFromRight 1.2s ease-out;
+}
+
+.animated-image {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  max-height: 700px;
+  object-fit: contain;
+}
+
+/* ===== Footer ===== */
+.footer {
+  position:fixed;
+  bottom:0;
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* ===== Animations ===== */
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(80px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 780px) {
+  .form-image-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .form-image-container,
+  .registration-form {
+    max-width: 90%;
+  }
+}

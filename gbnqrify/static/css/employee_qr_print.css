@@ -1,0 +1,125 @@
+@page {
+    size: 3.375in 2.125in;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.id-card {
+    width: 3.375in;
+    height: 2.125in;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    padding: 15px 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* Prevent breaking inside print */
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.company-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-wrap: nowrap; /* crucial: prevent wrapping */
+    flex-grow: 1;
+    overflow: hidden; /* prevent overflow */
+}
+
+.employee-info {
+    max-width: 60%;
+    flex-shrink: 1;
+    overflow-wrap: break-word;
+}
+
+.employee-name {
+    font-size: 1.25rem;
+    margin: 0 0 5px 0;
+    color: #222;
+}
+
+.department {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.qr-code-container {
+    max-width: 35%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-img {
+    height: 90px;
+    width: 90px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+/* Print button */
+.print-btn {
+    align-self: flex-end;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #004b8d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.print-btn:hover {
+    background-color: #0072f5;
+}
+
+/* Hide print button on print */
+@media print {
+    .print-btn {
+        display: none;
+    }
+    body {
+        background: white;
+        height: auto;
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+}

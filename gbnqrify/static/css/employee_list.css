@@ -1,0 +1,6 @@
+/* Make the name column narrower */
+.modern-table th:first-child,
+.modern-table td:first-child {
+  width: 80px;
+  white-space: nowrap;
+}

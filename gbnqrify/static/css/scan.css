@@ -1,0 +1,169 @@
+/* Reset and base styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(145deg, #1f1f2e, #2d2d44);
+    color: #ffffff;
+    /* Remove flex centering here because navbar will add vertical space */
+    /* We'll center scan-container below */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.7); /* transparent dark */
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin-left: 25px;
+}
+
+.nav-links a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #4caf50; /* highlight color */
+}
+
+.btn-logout {
+    background-color: transparent;
+    border: 1.5px solid #eee;
+    color: #eee;
+    padding: 6px 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    color: #fff;
+}
+
+/* Responsive navbar */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+    }
+    .nav-links li {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* Scan container and card centered below navbar */
+.scan-container {
+    flex-grow: 1; /* Take remaining height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0; /* add vertical padding so it’s not too close to navbar */
+    box-sizing: border-box;
+}
+
+.scan-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.scan-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #00ffc8;
+}
+
+.scan-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.scan-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #333647;
+    color: #00ffcc;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+.scan-input:focus {
+    background-color: #44475a;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #00ffc8;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.submit-btn:hover {
+    background-color: #00d6a8;
+}
+
+.feedback {
+    margin-top: 15px;
+    font-size: 1rem;
+    padding: 12px;
+    background-color: rgba(0, 255, 200, 0.1);
+    border-left: 5px solid #00ffc8;
+    border-radius: 8px;
+    color: #fff;
+    text-align: left;
+}

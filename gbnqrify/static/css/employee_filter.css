@@ -1,0 +1,317 @@
+/* ======================= */
+/* Reset & Base Styles     */
+/* ======================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom right, #0f172a, #1e293b);
+    color: #e2e8f0;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* ======================= */
+/* Navbar                  */
+/* ======================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.85);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(16px);
+}
+
+.logo img {
+    height: 42px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.nav-links a,
+.btn-logout {
+    color: #f1f5f9;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 15px;
+}
+
+.nav-links a:hover,
+.btn-logout:hover {
+    color: #38bdf8;
+}
+
+/* Logout button */
+.btn-logout {
+    padding: 6px 14px;
+    background-color: #ef4444;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #b91c1c;
+}
+
+/* ======================= */
+/* Dashboard Layout        */
+/* ======================= */
+.dashboard-container {
+    display: flex;
+    padding: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+/* Sidebar */
+.sidebar {
+    background: rgba(30, 41, 59, 0.8);
+    padding: 1.5rem;
+    border-radius: 12px;
+    min-width: 220px;
+    height: fit-content;
+    color: #f8fafc;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+    backdrop-filter: blur(20px);
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 1rem;
+    color: #38bdf8;
+    border-bottom: 1px solid #38bdf8;
+    padding-bottom: 0.5rem;
+}
+
+.filter-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.sidebar select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #38bdf8aa;
+    outline: none;
+    transition: 0.3s;
+}
+
+.sidebar select:hover {
+    background-color: #334155;
+}
+
+/* ======================= */
+/* Main Content Area       */
+/* ======================= */
+.main-content {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.85);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 0 24px rgba(0,0,0,0.4);
+    overflow-x: auto;
+    backdrop-filter: blur(16px);
+}
+
+/* Card Section */
+.card {
+    background-color: rgba(30, 41, 59, 0.9);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.1);
+}
+
+/* Section Title */
+.section-title {
+    font-size: 26px;
+    color: #38bdf8;
+    margin-bottom: 1.5rem;
+}
+
+/* ======================= */
+/* Table Styling           */
+/* ======================= */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.employee-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    min-width: 720px;
+}
+
+.employee-table th {
+    text-align: left;
+    padding: 14px 18px;
+    color: #7dd3fc;
+    font-size: 14px;
+    text-shadow: 0 0 3px #38bdf8aa;
+}
+
+.employee-table tbody tr {
+    background-color: rgba(2, 6, 23, 0.7);
+    transition: background 0.3s;
+    border-radius: 10px;
+}
+
+.employee-table tbody tr:hover {
+    background-color: rgba(56, 189, 248, 0.1);
+}
+
+.employee-table td {
+    padding: 14px 18px;
+    vertical-align: middle;
+    color: #e2e8f0;
+}
+
+/* Rounded corners for first and last cells */
+.employee-table td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.employee-table td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* ======================= */
+/* QR Image + Actions      */
+/* ======================= */
+.qr-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 6px #38bdf8aa;
+    transition: transform 0.3s ease;
+}
+
+.qr-img:hover {
+    transform: scale(1.05);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Common button base */
+.btn-edit, .btn-delete, .btn-print {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* Edit */
+.btn-edit {
+    background: transparent;
+    border: 1.5px solid #22c55e;
+    color: #22c55e;
+}
+
+.btn-edit:hover {
+    background: #22c55e;
+    color: #0f172a;
+}
+
+/* Delete */
+.btn-delete {
+    background: transparent;
+    border: 1.5px solid #ef4444;
+    color: #ef4444;
+}
+
+.btn-delete:hover {
+    background: #ef4444;
+    color: #0f172a;
+}
+
+/* Print */
+.btn-print {
+    background: transparent;
+    border: 1.5px solid #38bdf8;
+    color: #38bdf8;
+}
+
+.btn-print:hover {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+/* ======================= */
+/* No Data Message         */
+/* ======================= */
+.no-data {
+    text-align: center;
+    padding: 1.5rem 0;
+    color: #94a3b8;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ======================= */
+/* Footer                  */
+/* ======================= */
+.footer {
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+/* ======================= */
+/* Flash Messages          */
+/* ======================= */
+.message-container {
+    margin: 1.5rem 2rem;
+}
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    width: fit-content;
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+.alert.success {
+    background-color: #bbf7d0;
+    color: #14532d;
+    border: 1px solid #86efac;
+}

@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Header -->
+    <header class="header">
+        <img src="{% static 'images/logogbn.png' %}" alt="Company Logo" class="header-logo">
+        <h1 class="page-title">GBN QRify Admin Dashboard</h1>
+    </header>
+
+    <!-- Main Section -->
+    <div class="main-container">
+        <!-- Animated Logo -->
+        <div class="image-container">
+            <img src="{% static 'images/LogoQrify.png' %}" alt="Admin Logo" class="animated-slide-logo">
+        </div>
+
+        <!-- Login Box -->
+        <div class="login-container">
+            <div class="login-box">
+                <img src="/media/qr_codes/logo.png" alt="Company Logo" class="company-logo">
+                <h2>Admin Login</h2>
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <p class="error">Invalid username or password</p>
+                    {% endif %}
+                    <div class="input-group">
+                        <label for="id_username">Username</label>
+                        <input type="text" name="username" id="id_username" required autofocus>
+                    </div>
+                    <div class="input-group">
+                        <label for="id_password">Password</label>
+                        <input type="password" name="password" id="id_password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const logo = document.querySelector('.animated-slide-logo');
+            if (logo) {
+                setTimeout(() => {
+                    logo.classList.add('active');
+                }, 100);
+            }
+        });
+    </script>
+
+    <footer class="footer">
+        <p>© 2025 <strong>Anothjeev</strong> Dep_IT(Dev) - GBN All rights reserved</p>
+    </footer>
+</body>
+</html>

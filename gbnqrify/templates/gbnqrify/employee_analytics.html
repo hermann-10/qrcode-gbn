@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Analytics</title>
+  <link rel="stylesheet" href="{% static 'css/employee_analytics.css' %}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <a href="{% url 'dashboard' %}">
+      <img src="{% static 'images/logogbn.png' %}" alt="Logo" />
+    </a>
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      <li><a href="{% url 'analytics_general' %}">General</a></li>
+      <li><a href="{% url 'department_analytics' %}">Department</a></li>
+      <li><a href="{% url 'employee_analytics' %}" class="active">Employee</a></li>
+      <li>
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<h1>Employee Attendance Analytics</h1>
+
+<div class="employee-filter-container">
+  <label for="employeeSelect">Select Employee:</label>
+  <select id="employeeSelect">
+    <option value="">-- Select an Employee --</option>
+    {% for employee in employees %}
+      <option value="{{ employee.uuid }}">{{ employee.first_name }} {{ employee.last_name }}</option>
+    {% endfor %}
+  </select>
+
+  <button onclick="window.location.href='{% url 'attendance_clustering' %}'" class="btn btn-primary">
+    Employee Presence Pattern
+  </button>
+  <button id="togglePresenceBtn" class="btn-export">Today Presence</button>
+</div>
+
+<div class="chart-tabs">
+  <button class="chart-tab-btn active" data-chart="dailyChartWrapper">Daily Attendance</button>
+  <button class="chart-tab-btn" data-chart="weeklyChartWrapper">Weekly Attendance</button>
+  <button class="chart-tab-btn" data-chart="monthlyChartWrapper">Monthly Attendance</button>
+</div>
+
+<div class="chart-container">
+  <div id="dailyChartWrapper" class="single-chart-wrapper active">
+    <canvas id="dailyChart"></canvas>
+  </div>
+  <div id="weeklyChartWrapper" class="single-chart-wrapper">
+    <canvas id="weeklyChart"></canvas>
+  </div>
+  <div id="monthlyChartWrapper" class="single-chart-wrapper">
+    <canvas id="monthlyChart"></canvas>
+  </div>
+</div>
+
+<!-- Today Presence Button -->
+{% comment %} <button id="togglePresenceBtn" class="btn-export">Today Presence</button> {% endcomment %}
+
+<!-- Container for the attendance status table and export button, initially hidden -->
+<div id="presenceContainer" style="display:none;">
+  <button id="downloadExcel" class="btn-export">Export to Excel</button>
+  <table id="statusTable" class="modern-table" style="margin-top: 10px;">
+    <thead>
+      <tr><th>Name</th><th>AM</th><th>PM</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+  let dailyChart = null;
+  let weeklyChart = null;
+  let monthlyChart = null;
+  let presenceDataLoaded = false;
+
+  function renderChart(chartInstance, ctx, labels, data, label, bgColor) {
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: label,
+        data: data,
+        backgroundColor: bgColor,
+        borderRadius: 5,
+        maxBarThickness: 40,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            color: '#ffffff'  // White x-axis labels
+          },
+          grid: {
+            color: '#ffffff', // White x-axis grid lines
+            borderColor: '#ffffff' // Border line color
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            color: '#ffffff'  // White y-axis labels
+          },
+          grid: {
+            color: '#ffffff', // White y-axis grid lines
+            borderColor: '#ffffff' // Border line color
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false,
+          labels: {
+            color: '#ffffff'  // If you enable legends later, this makes them white
+          }
+        }
+      }
+    }
+  });
+}
+  function loadEmployeeData(uuid) {
+    if (!uuid) return;
+
+    $.ajax({
+      url: "{% url 'fetch_employee_data' %}",
+      data: { uuid: uuid },
+      success: function(response) {
+        // Daily chart
+        let dailyLabels = response.daily_data.map(d => d.date);
+        let dailyCounts = response.daily_data.map(d => d.count);
+        dailyChart = renderChart(
+          dailyChart,
+          document.getElementById('dailyChart').getContext('2d'),
+          dailyLabels,
+          dailyCounts,
+          'Daily Attendance',
+          'rgba(54,162,235,0.8)'
+        );
+
+        // Weekly chart
+        let weeklyLabels = response.weekly_data.map(d => d.week);
+        let weeklyCounts = response.weekly_data.map(d => d.count);
+        weeklyChart = renderChart(
+          weeklyChart,
+          document.getElementById('weeklyChart').getContext('2d'),
+          weeklyLabels,
+          weeklyCounts,
+          'Weekly Attendance',
+          'rgba(255,159,64,0.8)'
+        );
+
+        // Monthly chart
+        let monthlyLabels = response.monthly_data.map(d => d.month);
+        let monthlyCounts = response.monthly_data.map(d => d.count);
+        monthlyChart = renderChart(
+          monthlyChart,
+          document.getElementById('monthlyChart').getContext('2d'),
+          monthlyLabels,
+          monthlyCounts,
+          'Monthly Attendance',
+          'rgba(75,192,192,0.8)'
+        );
+
+        updateStatusTable(response.status_list);
+      },
+      error: function() {
+        alert("Failed to fetch data.");
+      }
+    });
+  }
+
+  function updateStatusTable(data) {
+    let tbody = $('#statusTable tbody');
+    tbody.empty();
+    data.forEach(emp => {
+      let amClass = emp.AM === 'IP' ? 'status-ip' : 'status-wh';
+      let pmClass = emp.PM === 'IP' ? 'status-ip' : 'status-wh';
+      tbody.append(`<tr>
+        <td>${emp.name}</td>
+        <td class="${amClass}">${emp.AM}</td>
+        <td class="${pmClass}">${emp.PM}</td>
+      </tr>`);
+    });
+  }
+
+  // Chart tab switching
+  $('.chart-tab-btn').on('click', function() {
+    $('.chart-tab-btn').removeClass('active');
+    $(this).addClass('active');
+    let chartId = $(this).data('chart');
+    $('.single-chart-wrapper').removeClass('active');
+    $('#' + chartId).addClass('active');
+  });
+
+  // Employee select change event
+  $('#employeeSelect').on('change', function() {
+    let uuid = $(this).val();
+    loadEmployeeData(uuid);
+  });
+
+  // Toggle presence container
+  $('#togglePresenceBtn').on('click', function() {
+    const container = $('#presenceContainer');
+    if (container.is(':visible')) {
+      container.hide();
+    } else {
+      container.show();
+      if (!presenceDataLoaded) {
+        $.ajax({
+          url: "{% url 'fetch_attendance_status_today' %}",
+          success: function(response) {
+            updateStatusTable(response.status_list);
+            presenceDataLoaded = true;
+          },
+          error: function() {
+            alert("Failed to fetch today's attendance status.");
+          }
+        });
+      }
+    }
+  });
+
+  // Export table to Excel
+  $('#downloadExcel').on('click', function() {
+    const headers = [['Name', 'AM', 'PM']];
+    const data = [];
+    $('#statusTable tbody tr').each(function () {
+      const name = $(this).find('td').eq(0).text().trim();
+      const am = $(this).find('td').eq(1).text().trim();
+      const pm = $(this).find('td').eq(2).text().trim();
+      data.push([name, am, pm]);
+    });
+
+    const worksheet = XLSX.utils.aoa_to_sheet([...headers, ...data]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Attendance Status");
+    XLSX.writeFile(workbook, "today_attendance_status.xlsx");
+  });
+</script>
+
+ <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 <strong>Anothjeev</strong> — Junior Full Stack Developer-GBN</p>
+    </footer>
+
+</body>
+</html>
