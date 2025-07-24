@@ -30,9 +30,13 @@ from datetime import time as dt_time
 
 import xlsxwriter
 
+
+
 #Machine Learning
 from sklearn.cluster import KMeans
 import numpy as np
+
+
 
 swiss_tz = pytz.timezone('Europe/Zurich')
 
@@ -395,8 +399,7 @@ def get_attendance_data(request):
         }
     })
     
-
-
+    
 def department_attendance_data(request):
     from datetime import datetime, timedelta
 
@@ -562,36 +565,150 @@ def download_employee_excel(request):
         return HttpResponse('Employee not found.', status=404)
 
     today = now().date()
-    am_present = Attendance.objects.filter(employee=employee, date=today, time__lt=dt_time(12,0)).exists()
-    pm_present = Attendance.objects.filter(employee=employee, date=today, time__gte=dt_time(12,0)).exists()
-    am_status = 'IP' if am_present else 'WH'
-    pm_status = 'IP' if pm_present else 'WH'
 
+    # Get AM attendance
+    am_attendance = Attendance.objects.filter(
+        employee=employee,
+        date=today,
+        session='AM'
+    ).order_by('time').first()
+
+    # Get PM attendance
+    pm_attendance = Attendance.objects.filter(
+        employee=employee,
+        date=today,
+        session='PM'
+    ).order_by('time').first()
+
+    # Define time thresholds
+    AM_CUTOFF = dt_time(9, 0)
+    PM_CUTOFF = dt_time(13, 30)
+
+    # Determine AM status and scan time
+    if am_attendance:
+        am_scan_time = am_attendance.time.strftime('%H:%M')
+        am_status = 'On Time' if am_attendance.time < AM_CUTOFF else 'Delay'
+    else:
+        am_scan_time = '-'
+        am_status = 'WH'
+
+    # Determine PM status and scan time
+    if pm_attendance:
+        pm_scan_time = pm_attendance.time.strftime('%H:%M')
+        pm_status = 'On Time' if pm_attendance.time <= PM_CUTOFF else 'Delay'
+    else:
+        pm_scan_time = '-'
+        pm_status = 'WH'
+
+    # Create Excel
     today_str = today.strftime('%d.%m.%Y')
     buf = BytesIO()
     wb = xlsxwriter.Workbook(buf, {'in_memory': True})
     ws = wb.add_worksheet('Presence')
+
+    # Formatting
     tf = wb.add_format({'bold': True, 'font_size': 14, 'align': 'center'})
     df = wb.add_format({'italic': True, 'font_size': 10, 'align': 'center'})
     hf = wb.add_format({'bold': True, 'border': 1, 'align': 'center'})
     cf = wb.add_format({'border': 1, 'align': 'center'})
 
-    ws.merge_range('A1:C1', 'GBN Employee Presence', tf)
-    ws.merge_range('A2:C2', f'Date: {today_str}', df)
+    # Headers and layout
+    ws.merge_range('A1:E1', 'GBN Employee Presence', tf)
+    ws.merge_range('A2:E2', f'Date: {today_str}', df)
     ws.write('A4', 'Name', hf)
-    ws.write('B4', 'AM', hf)
-    ws.write('C4', 'PM', hf)
+    ws.write('B4', 'AM Scan', hf)
+    ws.write('C4', 'AM Status', hf)
+    ws.write('D4', 'PM Scan', hf)
+    ws.write('E4', 'PM Status', hf)
+
+    # Row with data
     ws.write('A5', f"{employee.first_name} {employee.last_name}", cf)
-    ws.write('B5', am_status, cf)
-    ws.write('C5', pm_status, cf)
+    ws.write('B5', am_scan_time, cf)
+    ws.write('C5', am_status, cf)
+    ws.write('D5', pm_scan_time, cf)
+    ws.write('E5', pm_status, cf)
+
+    # Column width
     ws.set_column('A:A', 25)
-    ws.set_column('B:C', 10)
+    ws.set_column('B:E', 15)
+
+    # Finalize and return
+    wb.close()
+    buf.seek(0)
+    return HttpResponse(
+        buf.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers={'Content-Disposition': 'attachment; filename=employee_presence.xlsx'}
+    )
+    
+@user_passes_test(is_admin)
+def export_attendance_excel(request):
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    dept_id = request.GET.get('department_id')
+
+    start_date = datetime.strptime(start, "%Y-%m-%d").date()
+    end_date = datetime.strptime(end, "%Y-%m-%d").date()
+
+    employees = Employee.objects.all()
+    if dept_id:
+        employees = employees.filter(department_id=dept_id)
+
+    date_range = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+
+    buf = BytesIO()
+    wb = xlsxwriter.Workbook(buf, {'in_memory': True})
+    ws = wb.add_worksheet('Weekly Attendance')
+
+    # Header
+    headers = ["Date", "Department", "Employee", "AM Scan", "AM Status", "PM Scan", "PM Status"]
+    for col, header in enumerate(headers):
+        ws.write(0, col, header)
+
+    AM_CUTOFF = datetime.strptime("09:00", "%H:%M").time()
+    PM_CUTOFF = datetime.strptime("13:30", "%H:%M").time()
+
+    row = 1
+    for date in date_range:
+        for emp in employees:
+            dept_name = emp.get_department_display() if emp.department else "N/A"
+
+
+            am_att = Attendance.objects.filter(employee=emp, date=date, session='AM').order_by('time').first()
+            pm_att = Attendance.objects.filter(employee=emp, date=date, session='PM').order_by('time').first()
+
+            if am_att:
+                am_time = am_att.time.strftime("%H:%M")
+                am_status = "On Time" if am_att.time < AM_CUTOFF else "Delay"
+            else:
+                am_time = "-"
+                am_status = "WH"
+
+            if pm_att:
+                pm_time = pm_att.time.strftime("%H:%M")
+                pm_status = "On Time" if pm_att.time <= PM_CUTOFF else "Delay"
+            else:
+                pm_time = "-"
+                pm_status = "WH"
+
+            ws.write(row, 0, date.strftime("%Y-%m-%d"))
+            ws.write(row, 1, dept_name)
+            ws.write(row, 2, f"{emp.first_name} {emp.last_name}")
+            ws.write(row, 3, am_time)
+            ws.write(row, 4, am_status)
+            ws.write(row, 5, pm_time)
+            ws.write(row, 6, pm_status)
+            row += 1
 
     wb.close()
     buf.seek(0)
-    return HttpResponse(buf.read(),
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
+    return HttpResponse(
+        buf.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers={'Content-Disposition': 'attachment; filename="weekly_attendance_summary.xlsx"'}
+    ) 
+    
+
     
 def general_view(request):
     return render(request, 'gbnqrify/general.html')   
@@ -677,6 +794,19 @@ def attendance_clustering_view(request):
             avg_pm_time = (sum([dt.time().hour * 3600 + dt.time().minute * 60 + dt.time().second for dt in pm_times]) // len(pm_times))
             avg_pm_time = time(hour=avg_pm_time // 3600, minute=(avg_pm_time % 3600) // 60, second=avg_pm_time % 60)
 
+        expected_am_time = time(9, 15)
+        expected_pm_time = time(13, 30)
+
+        am_status = 'No Data'
+        pm_status = 'No Data'
+
+        if avg_am_time:
+            am_status = 'On Time' if avg_am_time <= expected_am_time else 'Late'
+        if avg_pm_time:
+            pm_status = 'On Time' if avg_pm_time <= expected_pm_time else 'Late'
+
+        
+        
         stats[emp.uuid] = {
             'employee': emp,
             'am_ratio': am_ratio,
@@ -686,7 +816,10 @@ def attendance_clustering_view(request):
             'pm_delay_ratio': pm_delay_ratio,
             'avg_am_time': avg_am_time,
             'avg_pm_time': avg_pm_time,
-        }
+            'am_status': am_status,
+            'pm_status': pm_status,
+                    
+            }
 
     # Clustering 
     X = np.array([

@@ -1,64 +1,151 @@
 /* attendance_clustering.css */
 
 body {
-  background-color: #121221;
-  color: #e0e0e0;
+  background-color: #0e0e1a;
+  color: #e2e2f2;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 20px;
+  padding: 40px 20px 80px; /* Added bottom padding for footer space */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Sticky Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+  background: rgba(30, 41, 59, 0.9);
+  align-items: center;
+  padding: 10px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Space below navbar */
 .container {
-  max-width: 960px;
-  margin: auto;
-  background-color: #1e1e2f;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  max-width: 1100px;
+  margin: 30px auto 60px; /* margin-top and bottom for spacing */
+  background-color: #1a1a2e;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-grow: 1; /* Allow container to expand in flex layout */
+}
+
+/* Footer Sticky Bottom */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #64748b;
+  font-size: 0.95rem;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(100, 116, 139, 0.2);
+  user-select: none;
+  z-index: 1000;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Other styles remain the same */
+.logo img {
+  height: 50px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a.active,
+.nav-links li a:hover {
+  color: #3399ff;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #ef4444;
+  color: white;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 30px;
-  color: #a0a0b8;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  color: #c4c7f0;
+  font-weight: bold;
 }
 
+/* Table Design */
 table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 12px;
-  border-radius: 8px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #222239;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
 }
 
-thead tr {
-  background-color: #292a3a;
-  text-align: left;
+thead {
+  background-color: #2a2a40;
 }
 
 thead th {
-  padding: 16px 20px;
-  font-weight: 600;
+  padding: 18px 24px;
+  font-weight: 700;
   font-size: 1rem;
-  color: #a0a0b8;
-  border-bottom: 2px solid #444466;
+  color: #b0b4d4;
+  border-bottom: 2px solid #33334d;
+  text-align: left;
 }
 
 tbody tr {
-  background-color: #2b2c40;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+  background-color: #2f2f4f;
+  transition: background 0.3s;
 }
 
 tbody tr:hover {
-  background-color: #3c3d5e;
+  background-color: #404060;
 }
 
 tbody td {
-  padding: 14px 20px;
-  border-bottom: 1px solid #3a3b52;
+  padding: 16px 24px;
+  border-bottom: 1px solid #39395c;
   font-size: 0.95rem;
+  color: #e2e2f2;
   vertical-align: middle;
 }
 
@@ -66,36 +153,60 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Responsive for smaller screens */
-@media (max-width: 600px) {
+/* Badge Styles */
+.badge {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-block;
+  color: white;
+}
+
+.badge-success {
+  background: linear-gradient(135deg, #38d39f, #1dc8cc);
+}
+
+.badge-danger {
+  background: linear-gradient(135deg, #ff6b6b, #c0392b);
+}
+
+.badge-secondary {
+  background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   table, thead, tbody, th, td, tr {
     display: block;
   }
 
-  thead tr {
+  thead {
     display: none;
   }
 
   tbody tr {
-    margin-bottom: 18px;
-    box-shadow: 0 4px 8px rgb(0 0 0 / 0.4);
-    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #262646;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
     padding: 12px;
   }
 
   tbody td {
-    border: none;
-    padding-left: 50%;
     position: relative;
-    text-align: left;
+    padding-left: 55%;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border: none;
   }
 
   tbody td::before {
     content: attr(data-label);
     position: absolute;
-    left: 20px;
     top: 14px;
+    left: 20px;
     font-weight: 700;
-    color: #a0a0b8;
+    color: #a0a0c8;
   }
 }

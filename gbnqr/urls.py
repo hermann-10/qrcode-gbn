@@ -61,6 +61,8 @@ urlpatterns = [
     
     path('attendance-clustering/', views.attendance_clustering_view, name='attendance_clustering'),
     
+    path('export-attendance-excel/', views.export_attendance_excel, name='export_attendance_excel'),
+    
 ]
 
 # Static/Media in Dev

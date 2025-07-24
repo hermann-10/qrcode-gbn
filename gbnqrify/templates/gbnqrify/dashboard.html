@@ -69,14 +69,14 @@
 
            
             <!-- Settings Box -->
-            <div class="dashboard-box contact-box" onclick="window.location.href='{% url 'employee_data' %}'">
+            {% comment %} <div class="dashboard-box contact-box" onclick="window.location.href='{% url 'employee_data' %}'">
                 <h2>Settings</h2>
                 <div class="logocont">
                     <img src="{% static 'images/Settings_ad.png' %}" alt="Settings Logo" class="employee-img" />
                 </div>
                 <div class="analytics-options">
                 </div>
-            </div>
+            </div> {% endcomment %}
         </section>
     </main>
 

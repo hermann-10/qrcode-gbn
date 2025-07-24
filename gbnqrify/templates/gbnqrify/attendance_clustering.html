@@ -9,44 +9,99 @@
   <title>Attendance Clustering</title>
   <link rel="stylesheet" href="{% static 'css/attendance_clustering.css' %}" />
 </head>
+
+<header class="navbar">
+  <div class="logo">
+    <a href="{% url 'dashboard' %}">
+      <img src="{% static 'images/logogbn.png' %}" alt="Logo" />
+    </a>
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      <li><a href="{% url 'analytics_general' %}">General</a></li>
+      <li><a href="{% url 'department_analytics' %}">Department</a></li>
+      <li><a href="{% url 'employee_analytics' %}" class="active">Employee</a></li>
+      <li>
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+
+
+
+
 <body>
 
   <div class="container">
-    <h1>Attendance Clustering</h1>
+    <h1>Employee Presence Summary</h1>
 
     <table>
       <thead>
         <tr>
           <th>Employee</th>
-          <th>Cluster</th>
           <th>Avg AM Scan Time</th>
+          <th>AM Status</th>
           <th>Avg PM Scan Time</th>
+          <th>PM Status</th>
+          <th>Cluster</th>
         </tr>
       </thead>
       <tbody>
         {% for stat in stats %}
           <tr>
             <td data-label="Employee">{{ stat.employee.first_name }} {{ stat.employee.last_name }}</td>
-            <td data-label="Cluster">{{ cluster_labels|dict_get:stat.cluster }}</td>
+
             <td data-label="Avg AM Scan Time">
               {% if stat.avg_am_time %}
                 {{ stat.avg_am_time|time:"H:i:s" }}
               {% else %}
-                N/A
+                --
               {% endif %}
             </td>
+
+            <td data-label="AM Status">
+              {% if stat.am_status == 'On Time' %}
+                <span class="badge badge-success">On Time</span>
+              {% elif stat.am_status == 'Late' %}
+                <span class="badge badge-danger">Late</span>
+              {% else %}
+                <span class="badge badge-secondary">No Data</span>
+              {% endif %}
+            </td>
+
             <td data-label="Avg PM Scan Time">
               {% if stat.avg_pm_time %}
                 {{ stat.avg_pm_time|time:"H:i:s" }}
               {% else %}
-                N/A
+                --
               {% endif %}
             </td>
+
+            <td data-label="PM Status">
+              {% if stat.pm_status == 'On Time' %}
+                <span class="badge badge-success">On Time</span>
+              {% elif stat.pm_status == 'Late' %}
+                <span class="badge badge-danger">Late</span>
+              {% else %}
+                <span class="badge badge-secondary">No Data</span>
+              {% endif %}
+            </td>
+
+            <td data-label="Cluster">{{ cluster_labels|dict_get:stat.cluster }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+    <footer class="footer">
+        <p>© 2025 <strong>Anothjeev</strong> — Junior Full Stack Developer-GBN</p>
+    </footer>
 
 </body>
 </html>
