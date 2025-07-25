@@ -849,3 +849,12 @@ def attendance_clustering_view(request):
     }
 
     return render(request, 'gbnqrify/attendance_clustering.html', context)
+
+def employee_uuid_api(request):
+    password = request.headers.get('X-API-Password')  # Case-sensitive
+    print("Received password:", password)
+    if password != 'anothjeev_qrify_uuid':
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    employees = Employee.objects.all().values('id', 'full_name', 'uuid')
+    return JsonResponse(list(employees), safe=False)
