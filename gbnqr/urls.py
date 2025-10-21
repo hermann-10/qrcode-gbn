@@ -62,11 +62,7 @@ urlpatterns = [
     path('attendance-clustering/', views.attendance_clustering_view, name='attendance_clustering'),
     
     path('export-attendance-excel/', views.export_attendance_excel, name='export_attendance_excel'),
-    
-    
-    #UUID api endpoint
-    path('api/employee-uuids/', views.employee_uuid_api, name='employee_uuid_api'),
-    
+        
 ]
 
 # Static/Media in Dev

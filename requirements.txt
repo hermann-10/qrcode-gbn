@@ -1,0 +1,25 @@
+# Core Django Framework
+Django==5.2.3
+
+# QR Code Generation
+qrcode==7.4.2
+Pillow==10.4.0
+
+# Data Processing and Analysis
+pandas==2.2.3
+numpy==2.1.3
+
+# Excel File Generation
+XlsxWriter==3.2.0
+
+# Machine Learning
+scikit-learn==1.6.1
+
+# Timezone Support
+pytz==2024.2 
+
+# Python Standard Libraries (included by default, listed for reference)
+# datetime
+# uuid
+# io
+# collections
