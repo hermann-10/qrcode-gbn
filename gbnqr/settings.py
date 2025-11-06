@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-9^35v)abks(d3lwgw4n0!2zyf$%kud^guy^kmb!)j_)@!k8pm(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Allow all hosts for development
 
 
 # Application definition
@@ -118,6 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'gbnqrify','static'),  # This tells Django where to find your static folder
