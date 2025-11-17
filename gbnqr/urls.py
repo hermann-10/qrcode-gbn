@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
+from django.views.generic import RedirectView
 
 from gbnqrify import views
 
@@ -15,9 +16,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-    
-    
- 
+
+    # Home - Redirect to dashboard
+    path('', RedirectView.as_view(url='/dashboard/', permanent=False), name='home'),
+
+
     path('', include('gbnqrify.urls')),
 
     # QR Scanner (User)

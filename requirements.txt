@@ -1,6 +1,10 @@
 # Core Django Framework
 Django==5.2.3
 
+# Production Web Server
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+
 # QR Code Generation
 qrcode==7.4.2
 Pillow==10.4.0
