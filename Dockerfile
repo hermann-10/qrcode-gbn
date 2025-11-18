@@ -31,6 +31,7 @@ RUN python manage.py collectstatic --noinput || true
 # Expose port
 EXPOSE 8000
 
-# Run migrations and start server
+# Run migrations and start server with Gunicorn
 CMD python manage.py migrate && \
-    python manage.py runserver 0.0.0.0:8000
+    python manage.py collectstatic --noinput && \
+    gunicorn gbnqr.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
