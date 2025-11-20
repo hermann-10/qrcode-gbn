@@ -28,10 +28,12 @@ RUN mkdir -p /app/staticfiles /app/media
 # Collect static files
 RUN python manage.py collectstatic --noinput || true
 
+# Copy and set permissions for entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Expose port
 EXPOSE 8000
 
-# Run migrations and start server with Gunicorn
-CMD python manage.py migrate && \
-    python manage.py collectstatic --noinput && \
-    gunicorn gbnqr.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+# Use entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
