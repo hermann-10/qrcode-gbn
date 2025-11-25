@@ -19,13 +19,13 @@ services:
   web:
     build: .
     image: gbnqr:latest
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn gbnqr.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
+      PYTHONUNBUFFERED: 1
       DEBUG: ${DEBUG:-0}
       SECRET_KEY: ${SECRET_KEY}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}

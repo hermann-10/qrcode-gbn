@@ -18,5 +18,12 @@ echo "Creating default superuser if needed..."
 python manage.py create_default_superuser
 
 echo "Starting Gunicorn server..."
-# Start Gunicorn
-exec gunicorn gbnqr.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+# Start Gunicorn with access logs and error logs
+exec gunicorn gbnqr.wsgi:application \
+    --bind 0.0.0.0:8000 \
+    --workers 3 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile - \
+    --log-level info \
+    --capture-output
