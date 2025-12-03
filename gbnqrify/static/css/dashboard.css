@@ -249,7 +249,86 @@ body {
 }
 
 
-/* Responsive */
+/* Responsive - Medium screens with low height (856x400) */
+@media (max-width: 900px) and (max-height: 500px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    .logo-img {
+        height: 35px;
+    }
+
+    .nav-links {
+        gap: 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .profile-name img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .profile-name span {
+        font-size: 0.85rem;
+    }
+
+    .dashboard-title {
+        margin: 0.5rem 0 1rem 0;
+        font-size: 1.2rem;
+    }
+
+    .dashboard-title h1 {
+        font-size: 1.2rem;
+    }
+
+    .dashboard-main {
+        padding: 0.5rem 1rem;
+        padding-bottom: 60px;
+    }
+
+    .dashboard-container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 1rem;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .dashboard-box {
+        width: 220px;
+        max-height: 280px;
+        padding: 0.8rem;
+    }
+
+    .dashboard-box h2 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .employee-img {
+        width: 100px;
+        height: 70px;
+        margin-bottom: 0.5rem;
+    }
+
+    .staff-options,
+    .analytics-options {
+        gap: 0.4rem;
+    }
+
+    .box-link {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+
+    .footer {
+        padding: 0.8rem 0;
+        font-size: 0.8rem;
+    }
+}
+
+/* Responsive - Small screens */
 @media (max-width: 720px) {
     .dashboard-container {
         flex-direction: column;
@@ -269,5 +348,21 @@ body {
         width: 100%;
         justify-content: center;
         gap: 1rem;
+    }
+}
+
+/* Responsive - Very small height screens */
+@media (max-height: 450px) {
+    .dashboard-title {
+        margin: 0.3rem 0 0.5rem 0;
+    }
+
+    .dashboard-main {
+        padding-bottom: 50px;
+    }
+
+    .footer {
+        padding: 0.5rem 0;
+        font-size: 0.75rem;
     }
 }

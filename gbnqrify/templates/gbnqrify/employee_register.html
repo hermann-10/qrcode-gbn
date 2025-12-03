@@ -3,19 +3,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Employee Registration</title>
 
-    <!-- Your CSS -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Bootstrap CSS for modal -->
+    <!-- Bootstrap CSS for modal (loaded FIRST so custom CSS can override) -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
 
-    
+    <!-- Your CSS (loaded AFTER Bootstrap to override its styles) -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
 
