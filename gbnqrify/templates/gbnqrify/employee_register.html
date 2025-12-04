@@ -65,13 +65,18 @@
                     {{ form.last_name }}
                     {{ form.last_name.errors }}
 
-                    <label for="{{ form.created_at.id_for_label }}">Date of Joining:</label>
-                    {{ form.created_at }}
-                    {{ form.created_at.errors }}
+                    <label for="{{ form.date_birth.id_for_label }}">Date of Birth:</label>
+                    {{ form.date_birth }}
+                    {{ form.date_birth.errors }}
 
                     <label for="{{ form.department.id_for_label }}">Department:</label>
                     {{ form.department }}
                     {{ form.department.errors }}
+                    
+                    <label for="{{ form.created_at.id_for_label }}">Date of Joining:</label>
+                    {{ form.created_at }}
+                    {{ form.created_at.errors }}
+
 
                     <button type="submit" class="btn btn-primary mt-3">Register</button>
                 </form>

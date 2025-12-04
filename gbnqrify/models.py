@@ -26,6 +26,7 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES)
+    date_birth = models.DateField(null=True, blank=True)
     created_at = models.DateField(default=timezone.now)
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
